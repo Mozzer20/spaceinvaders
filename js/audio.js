@@ -1,6 +1,6 @@
 /**
  * Tiny self-contained Web Audio beeps. No files, no CDN.
- * Audio is unlocked on the first user gesture.
+ * Audio is unlocked on the first user gesture (required on iOS).
  */
 const Sfx = (() => {
   let ctx = null;
@@ -16,26 +16,24 @@ const Sfx = (() => {
     return ctx;
   }
 
-  function beep({ freq = 440, dur = 0.08, type = "square", gain = 0.06, slide = 0 }) {
+  function beep({ freq = 440, dur = 0.08, type = "square", gain = 0.06, slide = 0, at = 0 }) {
     if (muted) return;
     const ac = getCtx();
     if (!ac) return;
+    const t0 = ac.currentTime + at;
     const osc = ac.createOscillator();
     const g = ac.createGain();
     osc.type = type;
-    osc.frequency.setValueAtTime(freq, ac.currentTime);
+    osc.frequency.setValueAtTime(freq, t0);
     if (slide) {
-      osc.frequency.exponentialRampToValueAtTime(
-        Math.max(40, freq + slide),
-        ac.currentTime + dur
-      );
+      osc.frequency.exponentialRampToValueAtTime(Math.max(40, freq + slide), t0 + dur);
     }
-    g.gain.setValueAtTime(gain, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + dur);
+    g.gain.setValueAtTime(gain, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
     osc.connect(g);
     g.connect(ac.destination);
-    osc.start();
-    osc.stop(ac.currentTime + dur);
+    osc.start(t0);
+    osc.stop(t0 + dur);
   }
 
   return {
@@ -66,6 +64,17 @@ const Sfx = (() => {
     },
     wave() {
       beep({ freq: 520, dur: 0.2, type: "square", gain: 0.05, slide: 300 });
+    },
+    start() {
+      beep({ freq: 392, dur: 0.09, type: "square", gain: 0.05, at: 0 });
+      beep({ freq: 523, dur: 0.1, type: "square", gain: 0.05, at: 0.09 });
+      beep({ freq: 659, dur: 0.16, type: "square", gain: 0.06, at: 0.18 });
+    },
+    highscore() {
+      beep({ freq: 523, dur: 0.1, type: "square", gain: 0.05, at: 0 });
+      beep({ freq: 659, dur: 0.1, type: "square", gain: 0.05, at: 0.1 });
+      beep({ freq: 784, dur: 0.14, type: "square", gain: 0.06, at: 0.2 });
+      beep({ freq: 1046, dur: 0.22, type: "square", gain: 0.05, at: 0.34 });
     },
   };
 })();
