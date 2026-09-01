@@ -2,14 +2,17 @@
 
 A fan recreation of the classic 1978 arcade game **Space Invaders**, built as a static HTML5 canvas game (vanilla JavaScript, no framework, no backend, no CDN assets).
 
+**Play it live:** [https://mozzer20.github.io/spaceinvaders/](https://mozzer20.github.io/spaceinvaders/)
+
 This is an unofficial tribute. Space Invaders is a trademark of Taito / the current rights holders. This project is not affiliated with them.
 
 ## How to run
 
 Open the game in a desktop browser (keyboard required):
 
-1. **Simplest:** double-click `index.html`, or drag it into a browser tab.
-2. **Local static server** (recommended if a browser blocks `file://` modules or audio):
+1. **Live site:** [https://mozzer20.github.io/spaceinvaders/](https://mozzer20.github.io/spaceinvaders/)
+2. **Simplest local:** double-click `index.html`, or drag it into a browser tab.
+3. **Local static server** (recommended if a browser blocks `file://` modules or audio):
 
 ```bash
 # Python 3
@@ -20,8 +23,6 @@ npx --yes serve .
 ```
 
 Then visit [http://localhost:8000](http://localhost:8000).
-
-GitHub Pages also works if you enable it on this repo (root of `main`).
 
 ## Controls
 
